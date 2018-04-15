@@ -1,0 +1,223 @@
+= freedom-samples-crud
+xiayx <xiayouxue@hotmail.com>
+v1.0, 2018-03-25: SNAPSHOT
+:doctype: docbook
+:toc: left
+:numbered:
+:imagesdir: assets/images
+:sourcedir: src/main/java
+:resourcesdir: src/main/resources
+:testsourcedir: src/test/java
+:source-highlighter: highlightjs
+
+一个增删改查的示例。
+
+== 需求
+创建新项目的时候，希望能有个模板，可以基于此模板做快速开发。
+
+== 设计
+选用主流的技术，便于快捷开发。
+
+=== 框架选型
+* spring-boot:2
+* jpa2.1:1
+* hibernate:5
+* h2database:1
+* thymeleaf:3
+
+NOTE: thymeleaf使用3.0.8.RELEASE，3.0.9有一个严格表达式限制，参考 http://forum.thymeleaf.org/Thymeleaf-3-0-9-JUST-PUBLISHED-td4030728.html[Thymeleaf-3-0-9-JUST-PUBLISHED]
+
+=== 请求模式
+* 跳页请求：请求会导致跳页
+* 异步请求：请求不会导致跳页
+
+为了更加专注于后台，以减少对前端的依赖，
+目前采用【跳页请求】模式，所有功能都基于【跳页请求】实现。
+
+=== 页面
+==== 展示信息
+列表页::
+列表页展示列表信息。
+提供查询和删除功能，以及新增、查看、修改功能的入口。
+详情页::
+详情页展示详情信息。
+提供新增、修改功能。
+新增页、查看页、修改页都在同一个详情页上。
+
+目前仅提供这两类页面，如果需要特定功能的详情页，需自行更改。
+
+==== 交互流程
+* 查询之后，跳转列表页
+* 删除之后，跳转列表页
+* 新增/修改之后，跳转查看页
+
+=== 功能
+基本增删改查功能。
+
+==== 分页查询
+按名称和创建时间范围查询【示例】信息。
+
+==== 新增
+新增【示例】信息。
+
+==== 查看
+查看【示例】信息。
+
+==== 修改
+修改【示例】信息。
+
+==== 删除
+删除【示例】信息。
+
+
+== 实现
+
+=== 目录结构
+.后台
+* org.freedom.samples：样章项目存储目录
+** crud：本项目
+*** modules：模块存储目录
+**** demo：示例模块
+
+.前台
+* resources/templates：thymeleaf静态资源存储目录
+** crud：本项目
+*** demo：示例模块
+
+按以上目录组织，可便于将多个项目组合。
+
+=== 功能
+.请求地址命名规范
+* 查询：query
+* 新增：add
+* 查看：view
+* 修改：modify
+* 删除：delete
+
+.请求方法规范
+读取数据::
+GET
+* 查询
+* 跳转新增页
+* 跳转查看页
+* 跳转修改页
+写入数据::
+POST
+* 执行新增
+* 执行修改
+* 执行删除
+
+.服务接口命名规范
+* 查询：query
+* 新增：add
+* 查看：view
+* 修改：modify
+* 删除：delete
+
+.前后台数据命名约定
+列表页::
+* 查询参数：params
+* 分页排序参数：pageable
+* 查询结果：entities
+详情页::
+* 查询结果：entity
+
+.参数规范
+* 主键：id
+
+==== 分页查询
+.请求地址
+/demo/query
+
+.条件参数
+* name：名称
+* beginCreatedTime：起始创建时间
+* endCreatedTime：结束创建时间
+
+.排序参数
+* sort：排序，可排多个属性，格式：属性名[,asc|desc]
+
+前端暂不支持排序
+
+.分页参数
+* page:页码，从0开始，默认为0
+* size:每页记录数，默认为10
+
+前端暂不支持分页
+
+==== 新增
+===== 跳页
+.请求地址
+GET /demo/add
+
+===== 执行
+.请求地址
+POST /demo/save
+
+除主键属性可自由输入。
+开发模式下，提供默认数据，便于快速新增。
+新增失败，会直接显示异常信息；
+新增成功，会提示【操作成功】。
+
+新增的请求地址命名暂时不符合规范，需改为add。
+
+
+==== 查看
+.请求地址
+GET /demo/view
+
+==== 修改
+===== 跳页
+.请求地址
+GET /demo/modify
+
+===== 执行
+.请求地址
+POST /demo/save
+
+除主键属性可自由输入。
+修改失败，会直接显示异常信息；
+修改成功，会提示【操作成功】。
+
+修改的请求地址命名暂时不符合规范，需改为modify。
+
+==== 删除
+.请求地址
+GET /demo/delete
+
+删除失败，会直接显示异常信息；
+删除成功，会提示【操作成功】。
+删除的请求方法暂时不符合规范，需改为POST。
+
+=== 页面
+为了尽可能少的处理前端，
+布局上都采用HTML原生控件，没有使用第三方控件。
+列表页和详情页都使用输入框。
+
+=== 源文件命名
+.org.freedom.samples.crud.modules.demo
+* 实体类``Demo``
+* 资源库``DemoRepository``
+* 查询参数``DemoParam``
+* 服务接口``DemoService``
+* 服务实现``DemoServiceImpl``
+* 控制器``DemoController``
+
+.templates/crud/demo
+* list.html
+* detail.html
+
+=== 编码
+因为资源库层已经提供了对于增删改查的良好支持，
+自己只需要创建服务层实现分页查询功能。
+在控制器可直接依赖于资源库层和服务层。
+
+== 待完善
+* 数据验证
+* 异常处理
+* 从列表页打开详情页，详情页操作完成后，关闭详情页时刷新列表页以同步数据
+* 支持【异步请求】模式
+* 详情页变为只读
+
+
+
