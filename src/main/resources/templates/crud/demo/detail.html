@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>示例详情</title>
+</head>
+<body>
+<div th:if="${param.success}">操作成功</div>
+<br/>
+<form th:action="@{/demos/save}" method="post">
+    <input type="hidden" name="id" th:value="${entity.id}">
+    <div><label>名称：<input type="text" name="name" th:value="${entity.name}"></label></div>
+    <div><label>创建者：<input type="text" name="creatorId" th:value="${entity.creatorId}"></label></div>
+    <div><label>创建时间：<input type="text" name="createdTime" th:value="${#dates.format(entity.createdTime,'yyyy-MM-dd HH:mm:ss')}"></label></div>
+    <div><label>修改者：<input type="text" name="modifierId" th:value="${entity.modifierId}"></label></div>
+    <div><label>修改时间：<input type="text" name="modifiedTime" th:value="${#dates.format(entity.modifiedTime,'yyyy-MM-dd HH:mm:ss')}"></label></div>
+    <div>
+        <button type="submit" th:if="${!#request.requestURI.endsWith('/view')}">保存</button>
+        <button type="button" onclick="window.close()">关闭</button>
+    </div>
+</form>
+</body>
+</html>

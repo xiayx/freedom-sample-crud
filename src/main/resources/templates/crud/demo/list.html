@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>示例列表</title>
+</head>
+<body>
+<fieldset>
+    <legend>查询条件</legend>
+    <form th:action="@{/demos/query}">
+        <label>名称：<input type="text" name="name" placeholder="请输入名称" th:value="${params.name}"></label>
+        <label>创建时间：
+            <input type="text" name="beginCreatedTime" placeholder="请输入开始时间" th:value="${#dates.format(params.beginCreatedTime,'yyyy-MM-dd HH:mm:ss')}">
+            -
+            <input type="text" name="endCreatedTime" placeholder="请输入结束时间" th:value="${#dates.format(params.endCreatedTime,'yyyy-MM-dd HH:mm:ss')}">
+        </label>
+        <button type="submit">查询</button>
+        <button type="button" th:onclick="'location.href=\''+@{/demos/list}+'\''">清空</button>
+    </form>
+</fieldset>
+<div>
+    <a href="/demos/add" target="_blank">新增</a>
+</div>
+<div th:if="${param.success}">操作成功</div>
+<br/>
+<fieldset>
+    <legend>查询结果</legend>
+    <table>
+        <tr>
+            <th>主键</th>
+            <th>名称</th>
+            <th>创建者</th>
+            <th>创建时间</th>
+            <th>修改者</th>
+            <th>修改时间</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="entity : ${entities.content}">
+            <td th:text="${entity.id}"></td>
+            <td th:text="${entity.name}"></td>
+            <td th:text="${entity.creatorId}"></td>
+            <td th:text="${#dates.format(entity.createdTime)}"></td>
+            <td th:text="${entity.modifierId}"></td>
+            <td th:text="${#dates.format(entity.modifiedTime)}"></td>
+            <td>
+                <a th:href="'/demos/view?id='+${entity.id}" target="_blank">查看</a>
+                <a th:href="'/demos/modify?id='+${entity.id}" target="_blank">修改</a>
+                <a th:href="'/demos/delete?id='+${entity.id}+'&'+${#request.queryString?:''}">删除</a>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+</body>
+</html>
