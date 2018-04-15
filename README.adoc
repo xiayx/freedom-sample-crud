@@ -116,7 +116,7 @@ POST
 
 .前后台数据命名约定
 列表页::
-* 查询参数：params
+* 条件参数：params
 * 分页排序参数：pageable
 * 查询结果：entities
 详情页::
@@ -143,7 +143,9 @@ POST
 * page:页码，从0开始，默认为0
 * size:每页记录数，默认为10
 
-前端暂不支持分页
+前端暂不支持分页。
+
+查询异常，会直接显示异常信息；
 
 ==== 新增
 ===== 跳页
@@ -166,10 +168,20 @@ POST /demo/save
 .请求地址
 GET /demo/view
 
+.请求参数
+* 主键：id
+
+异常会直接显示异常信息。
+
 ==== 修改
 ===== 跳页
 .请求地址
 GET /demo/modify
+
+.请求参数
+* 主键：id
+
+异常会直接显示异常信息。
 
 ===== 执行
 .请求地址
@@ -184,6 +196,9 @@ POST /demo/save
 ==== 删除
 .请求地址
 GET /demo/delete
+
+.请求参数
+* 主键：id
 
 删除失败，会直接显示异常信息；
 删除成功，会提示【操作成功】。
@@ -211,6 +226,13 @@ GET /demo/delete
 因为资源库层已经提供了对于增删改查的良好支持，
 自己只需要创建服务层实现分页查询功能。
 在控制器可直接依赖于资源库层和服务层。
+
+== 使用
+依赖于 https://gradle.org/[Gradle]和 https://github.com/xiayx/freedom-readme[freedom-readme]。
+使用前，请对它们有所了解。
+
+* ``git clone https://github.com/xiayx/freedom-sample-crud.git``
+* run ``CurdApplication``
 
 == 待完善
 * 数据验证

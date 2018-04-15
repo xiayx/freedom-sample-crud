@@ -7,7 +7,7 @@
 <body>
 <div th:if="${param.success}">操作成功</div>
 <br/>
-<form th:action="@{/demos/save}" method="post">
+<form th:action="@{/demo/save}" method="post">
     <input type="hidden" name="id" th:value="${entity.id}">
     <div><label>名称：<input type="text" name="name" th:value="${entity.name}"></label></div>
     <div><label>创建者：<input type="text" name="creatorId" th:value="${entity.creatorId}"></label></div>

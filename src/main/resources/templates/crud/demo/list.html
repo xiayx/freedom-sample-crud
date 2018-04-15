@@ -7,7 +7,7 @@
 <body>
 <fieldset>
     <legend>查询条件</legend>
-    <form th:action="@{/demos/query}">
+    <form th:action="@{/demo/query}">
         <label>名称：<input type="text" name="name" placeholder="请输入名称" th:value="${params.name}"></label>
         <label>创建时间：
             <input type="text" name="beginCreatedTime" placeholder="请输入开始时间" th:value="${#dates.format(params.beginCreatedTime,'yyyy-MM-dd HH:mm:ss')}">
@@ -15,11 +15,11 @@
             <input type="text" name="endCreatedTime" placeholder="请输入结束时间" th:value="${#dates.format(params.endCreatedTime,'yyyy-MM-dd HH:mm:ss')}">
         </label>
         <button type="submit">查询</button>
-        <button type="button" th:onclick="'location.href=\''+@{/demos/list}+'\''">清空</button>
+        <button type="button" th:onclick="'location.href=\''+@{/demo/list}+'\''">清空</button>
     </form>
 </fieldset>
 <div>
-    <a href="/demos/add" target="_blank">新增</a>
+    <a href="/demo/add" target="_blank">新增</a>
 </div>
 <div th:if="${param.success}">操作成功</div>
 <br/>
@@ -43,9 +43,9 @@
             <td th:text="${entity.modifierId}"></td>
             <td th:text="${#dates.format(entity.modifiedTime)}"></td>
             <td>
-                <a th:href="'/demos/view?id='+${entity.id}" target="_blank">查看</a>
-                <a th:href="'/demos/modify?id='+${entity.id}" target="_blank">修改</a>
-                <a th:href="'/demos/delete?id='+${entity.id}+'&'+${#request.queryString?:''}">删除</a>
+                <a th:href="'/demo/view?id='+${entity.id}" target="_blank">查看</a>
+                <a th:href="'/demo/modify?id='+${entity.id}" target="_blank">修改</a>
+                <a th:href="'/demo/delete?id='+${entity.id}+'&'+${#request.queryString?:''}">删除</a>
             </td>
         </tr>
     </table>
